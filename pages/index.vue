@@ -3,7 +3,7 @@ import { NewsPostModel } from '~~/models/news-post'
 
 const runtimeConfig = useRuntimeConfig()
 
-const { data, pending, error, refresh } = await useFetch<NewsPostModel[]>('/news', { baseURL: runtimeConfig.apiBase })
+const { data, pending, error, refresh } = await useFetch<NewsPostModel[]>('/api/news', { baseURL: runtimeConfig.apiBase })
 
 definePageMeta({
   title: 'Home',
@@ -26,6 +26,9 @@ definePageMeta({
       </div>
     </div>
     <span v-if="pending">loading...</span>
-    <span v-if="error" class="has-text-danger">Kunde inte ladda nyheter {{ error.value }}</span>
+    <span v-if="error" class="has-text-danger">Kunde inte ladda nyheter {{ error }}</span>
   </NuxtLayout>
 </template>
+
+<style>
+</style>

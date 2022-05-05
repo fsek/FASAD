@@ -1,9 +1,17 @@
+<script setup lang="ts">
+import { Ref } from 'vue'
+import { User } from '~~/models/user'
+
+const user: Ref<User> = useState('user')
+const adminDropdownShow = ref(false)
+</script>
+
 <template>
   <div>
     <header class="">
       <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-          <a class="navbar-item" href="https://bulma.io">
+          <a class="navbar-item" href="/">
             <img src="/f.svg" class="logo">-sektionen inom TLTH
           </a>
 
@@ -85,13 +93,36 @@
 
           <div class="navbar-end">
             <div class="navbar-item">
-              <div class="buttons">
-                <a class="button is-primary">
-                  <strong>Sign up</strong>
-                </a>
-                <a class="button is-light">
+              <div v-if="!user?.loggedIn" class="buttons">
+                <NuxtLink class="button is-light" to="/register">
+                  Sign up
+                </NuxtLink>
+                <NuxtLink class="button is-primary" to="/login">
                   Log in
-                </a>
+                </NuxtLink>
+              </div>
+              <div v-if="user?.loggedIn">
+                <div class="dropdown" :class="{ 'is-active': adminDropdownShow }">
+                  <div class="dropdown-trigger">
+                    <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="adminDropdownShow = !adminDropdownShow">
+                      <span>Admin</span>
+                      <span class="icon is-small">
+                        <i class="fas fa-angle-down" aria-hidden="true" />
+                      </span>
+                    </button>
+                  </div>
+                  <div id="dropdown-menu" class="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                      <NuxtLink class="dropdown-item" to="/admin/users">
+                        Användare
+                      </NuxtLink>
+                      <NuxtLink class="dropdown-item" to="/admin/permissions">
+                        Rättigheter
+                      </NuxtLink>
+                    </div>
+                  </div>
+                </div>
+                <span>{{ user.email }}</span>
               </div>
             </div>
           </div>
@@ -103,7 +134,7 @@
       <slot />
     </main>
     <footer class="footer">
-      Copyright 2022 F-sektionen inom TLTH | HilbertOS skapat av <a href="#">web2.0-gruppen</a>
+      Copyright 2022 F-sektionen inom TLTH | HilbertWeb skapat av <a href="#">web2.0-gruppen</a>
     </footer>
   </div>
 </template>
@@ -112,13 +143,13 @@
   header {
     position: relative;
     width: 100%;
-    background-image: url(bg.jpg);
+    background-image: url(/bg.jpg);
     box-shadow: 25px 25px 100px 0 black inset, -25px -25px 100px 0 black inset;
     background-position: 50% 0;
     height: 75px;
     font-family: Roboto;
   }
   .logo {
-    height: 60px;
+    height: 72px;
   }
 </style>

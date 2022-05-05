@@ -3,15 +3,17 @@ export default {
   data () {
     return {
       login: {
-        username: '',
+        email: '',
         password: ''
       }
     }
   },
   methods: {
     async userLogin () {
+      const runtimeConfig = useRuntimeConfig()
+
       try {
-        const response = await useFetch('/auth/login', { method: 'POST', body: this.login })
+        const response = await useFetch('/api/authentication/login', { method: 'POST', body: this.login, baseURL: runtimeConfig.apiBase })
         console.log(response)
       } catch (err) {
         console.log(err)
@@ -23,10 +25,11 @@ export default {
 
 <template>
   <div>
+    <DataGrid />
     <form @submit.prevent="userLogin">
       <div>
-        <label>Username</label>
-        <input v-model="login.username" type="text">
+        <label>Email</label>
+        <input v-model="login.email" type="text">
       </div>
       <div>
         <label>Password</label>

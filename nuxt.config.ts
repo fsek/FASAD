@@ -6,7 +6,6 @@ export default defineNuxtConfig({
     strict: true
   },
   css: [
-    '~/assets/css/theme.scss'
   ],
   meta: {
     meta: [
