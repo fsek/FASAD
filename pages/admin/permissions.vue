@@ -1,33 +1,17 @@
-<script lang="ts">
+<script setup lang="ts">
 import { Permission } from '~~/models/permission'
 
-export default {
-  data () {
-    return {
-      roleInput: ref(''),
-      fetch: reactive({} as any),
-      columns: [
-        {
-          label: 'Permission',
-          field: 'value'
-        },
-        {
-          label: 'Selected',
-          field: 'selected',
-          type: 'boolean'
-        }
-      ]
-    }
-  },
-  methods: {
-    async submit () {
-      this.fetch = await useLazyFetch<Permission[]>('/api/permissions/permission/' + this.roleInput, { ...useState<RequestInit>('defaultFetchOpts').value })
-    }
-  }
-}
-</script>
+const { data, pending, error: fetchError } = await useFetch<Permission[]>('/api/permissions/permission', { ...useState<RequestInit>('defaultFetchOpts').value, headers: useRequestHeaders(['cookie']) })
 
-<script setup lang="ts">
+const reactiveState = reactive({ saveError: '' })
+
+const toggleBox = async (role: Permission) => {
+  reactiveState.saveError = ''
+
+  const resp = await useFetch('/api/permissions/permission', { ...useState<RequestInit>('defaultFetchOpts').value, method: 'POST', body: role })
+  if (resp.error.value) { reactiveState.saveError = 'Kunde inte spara roller' }
+}
+
 definePageMeta({
   title: 'Admin - Users'
 })
@@ -36,32 +20,23 @@ definePageMeta({
 <template>
   <NuxtLayout name="home">
     <div class="p-2">
-      <form @submit.prevent="submit">
-        <div class="field">
-          <label class="label">Role</label>
-          <div class="control">
-            <input v-model="roleInput" class="input" type="text">
-          </div>
-        </div>
-        <div>
-          <button class="button" type="submit">
-            Submit
-          </button>
-        </div>
-      </form>
-      <div v-if="fetch.error" class="has-text-danger">
-        {{ fetch.error }}
+      <div v-if="fetchError" class="has-text-danger">
+        {{ fetchError }}
       </div>
-      <client-only>
-        <vue-good-table
-          v-if="!fetch.pending"
-          :columns="columns"
-          :rows="fetch.data?.roleClaims ?? []"
-          :search-options="{
-            enabled: true
-          }"
-        />
-      </client-only>
+      <div v-if="reactiveState.saveError" class="has-text-danger">
+        {{ reactiveState.saveError }}
+      </div>
+      <div v-if="!pending">
+        <section v-for="role in data" :key="role.roleId" class="section">
+          <h4 class="title">
+            {{ role.roleName }}
+          </h4>
+          <span v-for="claim in role.roleClaims" :key="claim.value" class="mr-4">
+            {{ claim.value }}
+            <input v-model="claim.selected" type="checkbox" @change="toggleBox(role)">
+          </span>
+        </section>
+      </div>
     </div>
   </NuxtLayout>
 </template>
