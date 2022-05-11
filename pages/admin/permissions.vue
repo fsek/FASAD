@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Permission } from '~~/models/permission'
 
-const { data, pending, error: fetchError } = await useFetch<Permission[]>('/api/permissions/permission', { ...useState<RequestInit>('defaultFetchOpts').value, headers: useRequestHeaders(['cookie']) })
+const { data, pending, error: fetchError } = await useFetch<Permission[]>('/api/permissions/permission', { ...useState<RequestInit>('defaultFetchOpts').value })
 
 const reactiveState = reactive({ saveError: '' })
 

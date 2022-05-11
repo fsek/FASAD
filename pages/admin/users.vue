@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { User } from '~~/models/user'
-const runtimeConfig = useRuntimeConfig()
 
-const { data, pending, error, refresh } = await useFetch<User[]>('/api/users', { baseURL: runtimeConfig.apiBase })
+const { data, pending, error, refresh } = await useFetch<User[]>('/api/users', { ...useState<RequestInit>('defaultFetchOpts').value })
 
 const columns = [
   {

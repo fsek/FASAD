@@ -5,8 +5,15 @@ import { User } from '~~/models/user'
 const runtimeConfig = useRuntimeConfig()
 
 const { data: userData } = await useFetch<User>('/api/account/user', { baseURL: runtimeConfig.apiBase, headers: useRequestHeaders(['cookie']) })
-useState('user', () => userData)
-useState<RequestInit>('defaultFetchOpts', () => ({ baseURL: runtimeConfig.apiBase, credentials: 'include' })) // TODO: only use include for debug (i think)
+
+if (userData == null) {
+  useState('loggedIn', () => false)
+} else {
+  useState('user', () => userData)
+  useState('loggedIn', () => true)
+}
+
+useState<RequestInit>('defaultFetchOpts', () => ({ baseURL: runtimeConfig.apiBase, credentials: 'include', headers: useRequestHeaders(['cookie']) })) // TODO: only use include for debug (i think)
 </script>
 
 <template>

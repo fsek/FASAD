@@ -25,13 +25,18 @@ defineProps<{
           <p class="is-capitalized">
             {{ dayjs(news.created).format('ddd DD MMMM YYYY HH:mm:ss') }}
           </p>
+          <NuxtLink :to="`/admin/news/${news.id}`">
+            Adm
+          </NuxtLink>
         </div>
       </div>
-      <div class="content" v-html="news.content" />
+      <div class="content">
+        {{ news.content }}
+      </div>
     </div>
     <footer class="card-footer p-2 px-4">
       <p class="is-italic has-text-dark">
-        Ludwig "bananen" Linder
+        <UserLink :user="news.author" />
       </p>
     </footer>
   </div>

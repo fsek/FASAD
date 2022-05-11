@@ -3,6 +3,7 @@ import { Ref } from 'vue'
 import { User } from '~~/models/user'
 
 const user: Ref<User> = useState('user')
+const loggedIn: Ref<boolean> = useState('loggedIn')
 const adminDropdownShow = ref(false)
 </script>
 
@@ -93,7 +94,7 @@ const adminDropdownShow = ref(false)
 
           <div class="navbar-end">
             <div class="navbar-item">
-              <div v-if="!user?.loggedIn" class="buttons">
+              <div v-if="!loggedIn" class="buttons">
                 <NuxtLink class="button is-light" to="/register">
                   Sign up
                 </NuxtLink>
@@ -101,7 +102,7 @@ const adminDropdownShow = ref(false)
                   Log in
                 </NuxtLink>
               </div>
-              <div v-if="user?.loggedIn">
+              <div v-if="loggedIn">
                 <div class="dropdown" :class="{ 'is-active': adminDropdownShow }">
                   <div class="dropdown-trigger">
                     <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" @click="adminDropdownShow = !adminDropdownShow">
@@ -122,7 +123,7 @@ const adminDropdownShow = ref(false)
                     </div>
                   </div>
                 </div>
-                <span>{{ user.email }}</span>
+                <span>{{ user?.email }}</span>
               </div>
             </div>
           </div>
