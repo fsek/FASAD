@@ -6,7 +6,9 @@ import { User } from '~~/models/user'
 const runtimeConfig = useRuntimeConfig()
 
 const user: Ref<User> = useState('user')
-const { data, pending, error } = await useFetch<NewsPostModel[]>('/api/news', { baseURL: runtimeConfig.apiBase })
+const { data, pending, error } = await useFetch<NewsPostModel[]>('/api/news', {
+  baseURL: runtimeConfig.apiBase
+})
 
 definePageMeta({
   title: 'Home',

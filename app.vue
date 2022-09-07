@@ -4,12 +4,12 @@ import { User } from '~~/models/user'
 
 const runtimeConfig = useRuntimeConfig()
 
-const { data: userData } = await useFetch<User>('/api/account/user', { baseURL: runtimeConfig.apiBase, headers: useRequestHeaders(['cookie']) })
+const { data: userData, error } = await useFetch<User>('/api/account/user', { baseURL: runtimeConfig.apiBase, headers: useRequestHeaders(['cookie']) })
 
-if (userData == null) {
+if (userData.value == null || error.value != null) {
   useState('loggedIn', () => false)
 } else {
-  useState('user', () => userData)
+  useState('user', () => userData.value)
   useState('loggedIn', () => true)
 }
 

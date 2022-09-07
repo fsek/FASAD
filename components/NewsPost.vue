@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import dayjs from 'dayjs'
-import 'dayjs/locale/sv'
-
 import { NewsPostModel } from '~~/models/news-post'
-
-// eslint-disable-next-line import/no-named-as-default-member
-dayjs.locale('sv')
 
 defineProps<{
   news: NewsPostModel
@@ -22,9 +16,11 @@ defineProps<{
           </h4>
         </div>
         <div class="level-right">
-          <p class="is-capitalized">
-            {{ dayjs(news.created).format('ddd DD MMMM YYYY HH:mm:ss') }}
-          </p>
+          <ClientOnly>
+            <p class="is-capitalized">
+              {{ $dayjs(news.created).format('ddd DD MMMM YYYY HH:mm:ss') }}
+            </p>
+          </ClientOnly>
           <NuxtLink :to="`/admin/news/${news.id}`">
             Adm
           </NuxtLink>

@@ -18,12 +18,15 @@
     "eslint-plugin-nuxt": "^3.2.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^8.7.1",
-    "nuxt": "3.0.0-rc.2"
+    "nuxt": "3.0.0-rc.9"
   },
   "dependencies": {
-    "@nuxtjs/dayjs": "^1.4.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/vue-fontawesome": "^3.0.0-4",
     "@nuxtjs/proxy": "^2.1.0",
     "bulma": "^0.9.3",
+    "dayjs": "1.11.4",
     "node-sass": "^7.0.1",
     "sass": "^1.51.0",
     "vue-good-table-next": "^0.1.0"

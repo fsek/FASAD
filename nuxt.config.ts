@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     strict: true
   },
   css: [
+    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
   meta: {
     meta: [
@@ -19,14 +20,18 @@ export default defineNuxtConfig({
       }
     ]
   },
-  modules: [
-    '@nuxtjs/dayjs'
+  transpile: [
+    '@fortawesome/vue-fontawesome',
+    '@fortawesome/fontawesome-svg-core',
+    '@fortawesome/free-regular-svg-icons',
+    '@fortawesome/free-solid-svg-icons'
   ],
   runtimeConfig: {
     public: {
       apiBase: 'http://localhost:6969'
     }
-  }
+  },
+  ssr: false
   // proxying currently dosent work in nuxt 3 (on server-side rendering, with vite-proxy it works on web browser)
   // vite: {
   //   server: {

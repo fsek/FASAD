@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import dayjs from 'dayjs'
 import { NewsPostModel } from '~~/models/news-post'
 
 const { data, pending, error, refresh } = await useFetch<NewsPostModel[]>('/api/news', { ...useState<RequestInit>('defaultFetchOpts').value })
@@ -20,13 +19,26 @@ const columns = [
   {
     label: 'Created',
     field: 'created'
+  },
+  {
+    label: 'Delete',
+    field: 'delete'
   }
 ]
 
+let pendingDelete = ref(false)
+let errorDelete: any = ref(false)
+
 function onRowClick (params: any) {
   if (params.column.field === 'author') { return }
+  if (params.column.field === 'delete') { return }
   const router = useRouter()
   router.push('/admin/news/' + params.row.id)
+}
+
+async function deleteRow (row: any) {
+  ({ pending: pendingDelete, error: errorDelete } = await useFetch<NewsPostModel[]>('/api/news/', { body: { ...row }, method: 'DELETE', ...useState<RequestInit>('defaultFetchOpts').value }))
+  refresh()
 }
 
 definePageMeta({
@@ -38,7 +50,7 @@ definePageMeta({
   <NuxtLayout name="home">
     <div class="p-2">
       <div class="buttons">
-        <button class="button" :class="{'loading': pending }" @click="refresh()">
+        <button class="button" :class="{'loading': pending || pendingDelete }" @click="refresh()">
           Refresh
         </button>
         <NuxtLink class="button" to="/admin/news/new">
@@ -47,6 +59,9 @@ definePageMeta({
       </div>
       <div v-if="error" class="has-text-danger">
         {{ error }}
+      </div>
+      <div v-if="errorDelete" class="has-text-danger">
+        {{ errorDelete }}
       </div>
       <client-only>
         <vue-good-table
@@ -60,11 +75,14 @@ definePageMeta({
           @cell-click="onRowClick"
         >
           <template #table-row="props">
-            <span v-if="props.column.field === 'author'">
+            <span v-if="props.column.field === 'delete'">
+              <font-awesome-icon class="is-clickable" icon="trash" beat size="2x" @click="() => deleteRow(props.row)" />
+            </span>
+            <span v-else-if="props.column.field === 'author'">
               <UserLink :user="props.row.author" />
             </span>
             <span v-else-if="props.column.field === 'created'">
-              {{ dayjs(props.row.created).format('ddd DD MMMM YYYY HH:mm:ss') }}
+              {{ $dayjs(props.row.created).format('ddd DD MMMM YYYY HH:mm:ss') }}
             </span>
             <span v-else>
               {{ props.formattedRow[props.column.field] }}
