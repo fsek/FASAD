@@ -22,7 +22,7 @@ async function deleteNewsPost (newsPost: NewsPostModel) {
   router.replace('/admin/news')
 }
 
-const modelData = data ?? {} as NewsPostModel // this dosent actually copy the data, only makes it non-null incase of failure
+const modelData = data.value ?? {} as NewsPostModel // this dosent actually copy the data, only makes it non-null incase of failure
 
 definePageMeta({
   title: 'News'
@@ -57,13 +57,13 @@ definePageMeta({
           <textarea v-model="modelData.content" class="textarea" placeholder="Text input" />
         </div>
       </div>
-      <span>Written by <UserLink v-if="data.author" :user="data.author" /> at {{ $dayjs(modelData.created).format('ddd DD MMMM YYYY HH:mm:ss') }}</span>
+      <span>Written by <UserLink v-if="modelData.author" :user="modelData.author" /> at {{ $dayjs(modelData.created).format('ddd DD MMMM YYYY HH:mm:ss') }}</span>
 
       <div class="buttons mt-1">
         <button class="button is-success" :class="{'loading': pendingUpdate }" @click="() => saveNewsPost(modelData)">
           Save
         </button>
-        <button class="button is-danger" :class="{'loading': pendingUpdate }" @click="() => deleteNewsPost(data)">
+        <button class="button is-danger" :class="{'loading': pendingUpdate }" @click="() => deleteNewsPost(modelData)">
           Delete
         </button>
       </div>

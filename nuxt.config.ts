@@ -31,7 +31,7 @@ export default defineNuxtConfig({
       apiBase: 'http://localhost:6969'
     }
   },
-  ssr: false
+  ssr: true
   // proxying currently dosent work in nuxt 3 (on server-side rendering, with vite-proxy it works on web browser)
   // vite: {
   //   server: {

@@ -13,7 +13,7 @@ const columns = [
     field: 'email'
   },
   {
-    label: 'Email',
+    label: 'Email confirmed',
     field: 'emailConfirmed',
     type: 'boolean'
   }

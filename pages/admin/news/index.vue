@@ -21,13 +21,19 @@ const columns = [
     field: 'created'
   },
   {
+    label: 'Edit',
+    field: 'edit'
+  },
+  {
     label: 'Delete',
     field: 'delete'
   }
 ]
 
 let pendingDelete = ref(false)
+let pendingUpdate = ref(false)
 let errorDelete: any = ref(false)
+let errorUpdate: any = ref(false)
 
 function onRowClick (params: any) {
   if (params.column.field === 'author') { return }
@@ -41,6 +47,11 @@ async function deleteRow (row: any) {
   refresh()
 }
 
+async function editRow (row: any) {
+  ({ pending: pendingUpdate, error: errorUpdate } = await useFetch<NewsPostModel[]>('/api/news/', { body: { ...row }, method: 'PUT', ...useState<RequestInit>('defaultFetchOpts').value }))
+  refresh()
+}
+
 definePageMeta({
   title: 'Admin - Users'
 })
@@ -50,7 +61,7 @@ definePageMeta({
   <NuxtLayout name="home">
     <div class="p-2">
       <div class="buttons">
-        <button class="button" :class="{'loading': pending || pendingDelete }" @click="refresh()">
+        <button class="button" :class="{'loading': pending || pendingDelete || pendingUpdate }" @click="refresh()">
           Refresh
         </button>
         <NuxtLink class="button" to="/admin/news/new">
@@ -59,6 +70,9 @@ definePageMeta({
       </div>
       <div v-if="error" class="has-text-danger">
         {{ error }}
+      </div>
+      <div v-if="errorUpdate" class="has-text-danger">
+        {{ errorUpdate }}
       </div>
       <div v-if="errorDelete" class="has-text-danger">
         {{ errorDelete }}
@@ -76,7 +90,10 @@ definePageMeta({
         >
           <template #table-row="props">
             <span v-if="props.column.field === 'delete'">
-              <font-awesome-icon class="is-clickable" icon="trash" beat size="2x" @click="() => deleteRow(props.row)" />
+              <font-awesome-icon class="is-clickable" icon="trash" beat @click="() => deleteRow(props.row)" />
+            </span>
+            <span v-else-if="props.column.field === 'edit'">
+              <font-awesome-icon class="is-clickable" icon="pen" beat @click="() => editRow(props.row)" />
             </span>
             <span v-else-if="props.column.field === 'author'">
               <UserLink :user="props.row.author" />
