@@ -7,7 +7,19 @@ Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
 
 ## Setup
 
-Make sure to install the dependencies:
+Install `nvm`:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+```
+
+Install `node`:
+
+```bash
+nvm install
+```
+
+Install the dependencies:
 
 ```bash
 # npm
